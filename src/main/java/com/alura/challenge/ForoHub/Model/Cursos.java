@@ -27,7 +27,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Curso  {
+public class Cursos {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,9 +60,9 @@ public class Curso  {
 
     @OneToMany(mappedBy = "curso")
     @JsonIgnore
-    private List<Topico> topicos;
+    private List<Topicos> topicos;
 
-    public Curso(DatosRegistroCurso registroCurso){
+    public Cursos(DatosRegistroCurso registroCurso){
         this.nombre = registroCurso.nombre();
         this.categoriaPrincipal = registroCurso.categoriaPrincipal();
         this.subcategoria = registroCurso.subcategoria();

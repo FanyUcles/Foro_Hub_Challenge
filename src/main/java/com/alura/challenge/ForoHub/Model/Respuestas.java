@@ -23,7 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Respuesta {
+public class Respuestas {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,12 +39,12 @@ public class Respuesta {
     private Boolean solucion = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Usuario autor;
+    private Usuarios autor;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Topico topico;
+    private Topicos topico;
 
-    public Respuesta(DatosRegistroRespuestas respuestaDTO, Usuario autor, Topico topico) {
+    public Respuestas(DatosRegistroRespuestas respuestaDTO, Usuarios autor, Topicos topico) {
         this.mensaje = respuestaDTO.mensaje();
         this.fechaCreacion = LocalDateTime.now();
         this.solucion = false;

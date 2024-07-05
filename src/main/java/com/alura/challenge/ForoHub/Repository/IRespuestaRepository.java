@@ -1,17 +1,17 @@
 package com.alura.challenge.ForoHub.Repository;
 
-import com.alura.challenge.ForoHub.Model.Respuesta;
+import com.alura.challenge.ForoHub.Model.Respuestas;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IRespuestaRepository extends JpaRepository<Respuesta, Long>{
+public interface IRespuestaRepository extends JpaRepository<Respuestas, Long>{
 
-    public Page<Respuesta> findByStatusTrue(Pageable paginacion);
+    public Page<Respuestas> findByStatusTrue(Pageable paginacion);
 
-    Page<Respuesta> findByTopicoId(Long topicoId, Pageable pageable);
+    Page<Respuestas> findByTopicoId(Long topicoId, Pageable pageable);
 
 
 }

@@ -14,7 +14,7 @@ public record DatosRespuestaTopico(
         @NotNull String fechaCreacion,
         @NotNull String autor,
         @NotNull String nombreCategoria,
-        @NotNull List<DatosRespuestaRespuestas> respuestas
+        @NotNull List<DatosRespuestaARespuestas> respuestas
 ) {
 
 }

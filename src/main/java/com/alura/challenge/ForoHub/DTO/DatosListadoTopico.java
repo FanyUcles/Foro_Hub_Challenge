@@ -1,8 +1,8 @@
 package com.alura.challenge.ForoHub.DTO;
 
-import com.alura.challenge.ForoHub.Model.Curso;
-import com.alura.challenge.ForoHub.Model.Topico;
-import com.alura.challenge.ForoHub.Model.Usuario;
+import com.alura.challenge.ForoHub.Model.Cursos;
+import com.alura.challenge.ForoHub.Model.Topicos;
+import com.alura.challenge.ForoHub.Model.Usuarios;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -19,16 +19,16 @@ public record DatosListadoTopico(
         @NotNull
         Boolean status,
         @NotNull
-        Usuario autor,
+        Usuarios autor,
         @NotNull
-        Curso curso) {
+        Cursos cursos) {
 
-    public DatosListadoTopico(Topico topico) {
+    public DatosListadoTopico(Topicos topico) {
         this(topico.getTitulo(),
                 topico.getMensaje(),
                 topico.getFechaCreacion(),
                 topico.getStatus(),
                 topico.getAutor(),
-                topico.getCurso());
+                topico.getCursos());
     }
 }

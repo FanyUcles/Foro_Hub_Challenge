@@ -4,7 +4,7 @@ import com.alura.challenge.ForoHub.Tipos.TipoPerfil;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record DatosRespuestaRespuestas(
+public record DatosRespuestaARespuestas(
 
         @NotNull Long id,
         @NotBlank String mensaje,

@@ -2,8 +2,7 @@ package com.alura.challenge.ForoHub.Controller;
 
 import com.alura.challenge.ForoHub.DTO.DatosListadoCurso;
 import com.alura.challenge.ForoHub.DTO.DatosRegistroCurso;
-import com.alura.challenge.ForoHub.Tipos.Categoria;
-import com.alura.challenge.ForoHub.Model.Curso;
+import com.alura.challenge.ForoHub.Model.Cursos;
 import com.alura.challenge.ForoHub.Repository.ICursoRepository;
 import com.alura.challenge.ForoHub.Service.CursoService;
 
@@ -26,7 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  @RestController
 @RequestMapping("/curso")
 @SecurityRequirement(name = "bearer-key")
-public class CursoController {
+public class CursosController {
 
     @Autowired
     private CursoService cursoService;
@@ -37,14 +36,14 @@ public class CursoController {
     @PostMapping("/registrar")
     public ResponseEntity registrarCurso(@RequestBody @Valid DatosRegistroCurso datosRegistroCurso, UriComponentsBuilder uriComponentsBuilder) {
         System.out.println(datosRegistroCurso.subcategoria());
-        Curso curso = cursoService.registrarCurso(datosRegistroCurso);
-        System.out.println(curso.getSubcategoria());
+        Cursos cursos = cursoService.registrarCurso(datosRegistroCurso);
+        System.out.println(cursos.getSubcategoria());
         DatosRegistroCurso datosRespuesta = new DatosRegistroCurso(
-                curso.getNombre(),
-                curso.getCategoriaPrincipal(),
-                curso.getSubcategoria());
+                cursos.getNombre(),
+                cursos.getCategoriaPrincipal(),
+                cursos.getSubcategoria());
 
-        URI url = uriComponentsBuilder.path("/curso/{id}").buildAndExpand(curso.getId()).toUri();
+        URI url = uriComponentsBuilder.path("/curso/{id}").buildAndExpand(cursos.getId()).toUri();
 
         return ResponseEntity.created(url).body(datosRegistroCurso);
     }
@@ -53,7 +52,7 @@ public class CursoController {
     public ResponseEntity<Page<DatosListadoCurso>> listarCursos(
             @PageableDefault(size = 10, sort = "nombre", direction = Sort.Direction.ASC) Pageable paginacion) {
 
-        Page<Curso> curso = cursoRepo.findByStatusTrue(paginacion);
+        Page<Cursos> curso = cursoRepo.findByStatusTrue(paginacion);
         Page<DatosListadoCurso> datosListadoCurso = curso.map(DatosListadoCurso::new);
         return ResponseEntity.ok().body(datosListadoCurso);
     }

@@ -1,7 +1,7 @@
 package com.alura.challenge.ForoHub.DTO;
 
 import com.alura.challenge.ForoHub.Tipos.Categoria;
-import com.alura.challenge.ForoHub.Model.Curso;
+import com.alura.challenge.ForoHub.Model.Cursos;
 
 public record DatosListadoCurso(
 
@@ -9,11 +9,11 @@ public record DatosListadoCurso(
         Categoria categoriaPrincipal,
         String subcategoria) {
 
-    public DatosListadoCurso(Curso curso) {
+    public DatosListadoCurso(Cursos cursos) {
         this(
-                curso.getNombre(),
-                curso.getCategoriaPrincipal(),
-                curso.getSubcategoria()
+                cursos.getNombre(),
+                cursos.getCategoriaPrincipal(),
+                cursos.getSubcategoria()
         );
     }
 }

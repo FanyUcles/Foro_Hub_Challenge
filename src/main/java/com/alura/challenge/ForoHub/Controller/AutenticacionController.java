@@ -1,6 +1,6 @@
 package com.alura.challenge.ForoHub.Controller;
 
-import com.alura.challenge.ForoHub.Model.Usuario;
+import com.alura.challenge.ForoHub.Model.Usuarios;
 import com.alura.challenge.ForoHub.Security.TokenService;
 import com.alura.challenge.ForoHub.Security.DatosAutenticacionUsuario;
 import com.alura.challenge.ForoHub.Security.DatosJWTtoken;
@@ -34,9 +34,9 @@ public class AutenticacionController {
         System.out.println("-----Token de Autenticación----- " + authenticationToken);
         Authentication usuarioAutenticado = authenticationManager.authenticate(authenticationToken);
         System.out.println("-----Usuario Autenticado----- "+ usuarioAutenticado);
-        String tokenJWT = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
+        String tokenJWT = tokenService.generarToken((Usuarios) usuarioAutenticado.getPrincipal());
         System.out.println("-----Token JWT----- " + tokenJWT);
-        DatosJWTtoken response = new DatosJWTtoken(tokenJWT, ((Usuario) usuarioAutenticado.getPrincipal()).getNombre());
+        DatosJWTtoken response = new DatosJWTtoken(tokenJWT, ((Usuarios) usuarioAutenticado.getPrincipal()).getNombre());
         System.out.println("-----Response----- "+ response);
         return ResponseEntity.ok(response);
     }

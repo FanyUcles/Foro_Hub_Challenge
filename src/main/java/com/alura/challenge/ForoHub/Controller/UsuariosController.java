@@ -2,7 +2,7 @@ package com.alura.challenge.ForoHub.Controller;
 
 import com.alura.challenge.ForoHub.DTO.DatosRegistroUsuario;
 import com.alura.challenge.ForoHub.DTO.DatosRespuestaUsuario;
-import com.alura.challenge.ForoHub.Model.Usuario;
+import com.alura.challenge.ForoHub.Model.Usuarios;
 import com.alura.challenge.ForoHub.Service.UsuarioService;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -18,7 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping("/usuario")
 @SecurityRequirement(name = "bearer-key")
-public class UsuarioController {
+public class UsuariosController {
     @Autowired
     private UsuarioService usuarioService;
 
@@ -26,7 +26,7 @@ public class UsuarioController {
     public ResponseEntity registrarUsuario(@ModelAttribute DatosRegistroUsuario datosRegistroUsuario,
                                            UriComponentsBuilder uriComponentsBuilder) {
 
-        Usuario usuario = usuarioService.registrarUsuario(datosRegistroUsuario);
+        Usuarios usuario = usuarioService.registrarUsuario(datosRegistroUsuario);
 
         DatosRespuestaUsuario datosRespuestaUsuario = new DatosRespuestaUsuario(
                 usuario.getNombre(),

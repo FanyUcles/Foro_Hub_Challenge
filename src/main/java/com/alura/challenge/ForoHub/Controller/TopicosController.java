@@ -2,10 +2,10 @@ package com.alura.challenge.ForoHub.Controller;
 
 import com.alura.challenge.ForoHub.DTO.DatosListadoTopico;
 import com.alura.challenge.ForoHub.DTO.DatosRegistroTopico;
-import com.alura.challenge.ForoHub.DTO.DatosRespuestaRespuestas;
+import com.alura.challenge.ForoHub.DTO.DatosRespuestaARespuestas;
 import com.alura.challenge.ForoHub.DTO.DatosRespuestaTopico;
 import com.alura.challenge.ForoHub.Tipos.Categoria;
-import com.alura.challenge.ForoHub.Model.Topico;
+import com.alura.challenge.ForoHub.Model.Topicos;
 import com.alura.challenge.ForoHub.Repository.ITopicoRepository;
 import com.alura.challenge.ForoHub.Service.TopicoService;
 
@@ -37,7 +37,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping("/topico")
 @SecurityRequirement(name = "bearer-key")
-public class TopicoController {
+public class TopicosController {
 
     @Autowired
     private ITopicoRepository topicoRepo;
@@ -48,14 +48,14 @@ public class TopicoController {
     @PostMapping
     public ResponseEntity registrarTopico(@RequestBody @Valid DatosRegistroTopico datosRegistroTopico, UriComponentsBuilder uriComponentsBuilder) {
 
-        Topico topico = topicoService.registrarTopico(datosRegistroTopico);
+        Topicos topico = topicoService.registrarTopico(datosRegistroTopico);
 
         if (topico != null) {
             DatosRegistroTopico datosRespuestaTopico = new DatosRegistroTopico(
                     topico.getTitulo(),
                     topico.getMensaje(),
                     topico.getAutor().getId(),
-                    topico.getCurso().getId()
+                    topico.getCursos().getId()
             );
 
             URI url = uriComponentsBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
@@ -72,7 +72,7 @@ public class TopicoController {
     public ResponseEntity<Page<DatosListadoTopico>> listarTopico(
             @PageableDefault(size = 10, sort = "fechaCreacion", direction = Sort.Direction.ASC) Pageable paginacion) {
 
-        Page<Topico> topicos = topicoRepo.findByStatusTrue(paginacion);
+        Page<Topicos> topicos = topicoRepo.findByStatusTrue(paginacion);
         Page<DatosListadoTopico> datosListadoTopicos = topicos.map(DatosListadoTopico::new);
         return ResponseEntity.ok().body(datosListadoTopicos);
     }
@@ -83,7 +83,7 @@ public class TopicoController {
             @RequestParam int anio,
             @PageableDefault(size = 10, sort = {"curso.categoriaPrincipal", "fechaCreacion"}, direction = Sort.Direction.ASC) Pageable pageable) {
 
-        Page<Topico> topicos;
+        Page<Topicos> topicos;
 
         if (categoriaPrincipal != null) {
             topicos = topicoRepo.findByCursoCategoriaPrincipalAndAnio(categoriaPrincipal, anio, pageable);
@@ -102,14 +102,14 @@ public class TopicoController {
     @PutMapping("/actualizar")
     @Transactional
     public ResponseEntity actualizarTopico(@RequestBody @Valid DatosRegistroTopico.DatosActualizarTopico datosActualizarTopico) {
-        Optional<Topico> topicoOptional = topicoRepo.findById(datosActualizarTopico.id());
+        Optional<Topicos> topicoOptional = topicoRepo.findById(datosActualizarTopico.id());
 
         if (topicoOptional.isPresent()) {
-            Topico topico = topicoOptional.get();
+            Topicos topico = topicoOptional.get();
             topico.actualizarDatos(datosActualizarTopico);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            List<DatosRespuestaRespuestas> respuestasDTO = topico.getRespuestas().stream().map(respuesta
-                            -> new DatosRespuestaRespuestas(
+            List<DatosRespuestaARespuestas> respuestasDTO = topico.getRespuestas().stream().map(respuesta
+                            -> new DatosRespuestaARespuestas(
                             respuesta.getId(),
                             respuesta.getMensaje(),
                             respuesta.getFechaCreacion().format(formatter),
@@ -125,7 +125,7 @@ public class TopicoController {
                     topico.getMensaje(),
                     topico.getFechaCreacion().format(formatter),
                     topico.getAutor().getNombre(),
-                    topico.getCurso().getNombre(),
+                    topico.getCursos().getNombre(),
                     respuestasDTO
             );
             return ResponseEntity.ok(datosTopico);
@@ -137,9 +137,9 @@ public class TopicoController {
     @DeleteMapping("/eliminar/{id}")
     @Transactional
     public ResponseEntity eliminarTopico(@PathVariable Long id) {
-        Optional<Topico> topicoOptional = topicoRepo.findById(id);
+        Optional<Topicos> topicoOptional = topicoRepo.findById(id);
         if (topicoOptional.isPresent()) {
-            Topico topico = topicoOptional.get();
+            Topicos topico = topicoOptional.get();
             topicoRepo.deleteById(topico.getId());
             return ResponseEntity.ok().body("El topico se eliminó exitosamente");
         }
@@ -150,9 +150,9 @@ public class TopicoController {
     @DeleteMapping("/baja/{id}")
     @Transactional
     public ResponseEntity darDeBajaTopico(@PathVariable Long id) {
-        Optional<Topico> topicoOptional = topicoRepo.findById(id);
+        Optional<Topicos> topicoOptional = topicoRepo.findById(id);
         if (topicoOptional.isPresent()) {
-            Topico topico = topicoOptional.get();
+            Topicos topico = topicoOptional.get();
             topico.desactivarTopico();
             return ResponseEntity.ok().body("El topico se dió de baja exitosamente");
         }
@@ -162,9 +162,9 @@ public class TopicoController {
     @GetMapping("/alta/{id}")
     @Transactional
     public ResponseEntity darDeAltaTopico(@PathVariable Long id) {
-        Optional<Topico> topicoOptional = topicoRepo.findById(id);
+        Optional<Topicos> topicoOptional = topicoRepo.findById(id);
         if (topicoOptional.isPresent()) {
-            Topico topico = topicoOptional.get();
+            Topicos topico = topicoOptional.get();
             topico.activarTopico();
             return ResponseEntity.ok().body("El topico se dió de alta exitosamente");
         }
@@ -173,13 +173,13 @@ public class TopicoController {
 
     @GetMapping("/detalle/{id}")
     public ResponseEntity retornarDatosTopico(@PathVariable Long id) {
-        Optional<Topico> optionalTopico = topicoRepo.findById(id);
+        Optional<Topicos> optionalTopico = topicoRepo.findById(id);
         if (optionalTopico.isPresent()) {
-            Topico topico = optionalTopico.get();
+            Topicos topico = optionalTopico.get();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-            List<DatosRespuestaRespuestas> respuestasDTO = topico.getRespuestas().stream().map(respuesta
-                            -> new DatosRespuestaRespuestas(
+            List<DatosRespuestaARespuestas> respuestasDTO = topico.getRespuestas().stream().map(respuesta
+                            -> new DatosRespuestaARespuestas(
                             respuesta.getId(),
                             respuesta.getMensaje(),
                             respuesta.getFechaCreacion().format(formatter),
@@ -196,7 +196,7 @@ public class TopicoController {
                     topico.getMensaje(),
                     topico.getFechaCreacion().format(formatter),
                     topico.getAutor().getNombre(),
-                    topico.getCurso().getNombre(),
+                    topico.getCursos().getNombre(),
                     respuestasDTO
             );
             return ResponseEntity.ok(datosTopico);

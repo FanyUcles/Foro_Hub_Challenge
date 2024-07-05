@@ -31,7 +31,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Usuario  implements UserDetails {
+public class Usuarios implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -111,7 +111,7 @@ public class Usuario  implements UserDetails {
         return true;
     }
 
-    public Usuario(DatosRegistroUsuario datosRegistroUsuario) {
+    public Usuarios(DatosRegistroUsuario datosRegistroUsuario) {
         this.nombre = datosRegistroUsuario.nombre();
         this.correoElectronico = datosRegistroUsuario.email();
         this.password = new BCryptPasswordEncoder().encode(datosRegistroUsuario.password());

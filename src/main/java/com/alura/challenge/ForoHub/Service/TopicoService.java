@@ -2,10 +2,10 @@ package com.alura.challenge.ForoHub.Service;
 
 import com.alura.challenge.ForoHub.DTO.DatosRegistroTopico;
 import com.alura.challenge.ForoHub.Tipos.Categoria;
-import com.alura.challenge.ForoHub.Model.Curso;
-import com.alura.challenge.ForoHub.Model.Respuesta;
-import com.alura.challenge.ForoHub.Model.Topico;
-import com.alura.challenge.ForoHub.Model.Usuario;
+import com.alura.challenge.ForoHub.Model.Cursos;
+import com.alura.challenge.ForoHub.Model.Respuestas;
+import com.alura.challenge.ForoHub.Model.Topicos;
+import com.alura.challenge.ForoHub.Model.Usuarios;
 import com.alura.challenge.ForoHub.Repository.ICursoRepository;
 import com.alura.challenge.ForoHub.Repository.ITopicoRepository;
 import com.alura.challenge.ForoHub.Repository.IUsuarioRepository;
@@ -30,22 +30,22 @@ public class TopicoService {
     @Autowired
     private IUsuarioRepository usuarioRepository;
     @Transactional
-    public Topico registrarTopico(DatosRegistroTopico datosRegistroTopico) {
+    public Topicos registrarTopico(DatosRegistroTopico datosRegistroTopico) {
         // Verificar si el curso existe
         Long cursoId = datosRegistroTopico.cursoId();
-        Curso curso = cursoRepository.findById(cursoId)
+        Cursos cursos = cursoRepository.findById(cursoId)
                 .orElseThrow(() -> new IllegalArgumentException("El curso con ID " + cursoId + " no existe."));
-        System.out.println("Curso encontrado: " + curso);
+        System.out.println("Curso encontrado: " + cursos);
 
         // Verificar si el autor existe
         Long autorId = datosRegistroTopico.autorId();
-        Usuario autor = usuarioRepository.findById(autorId)
+        Usuarios autor = usuarioRepository.findById(autorId)
                 .orElseThrow(() -> new IllegalArgumentException("El autor con ID " + autorId + " no existe."));
         System.out.println("Autor encontrado: " + autor);
 
         // Verificar si ya existe un tópico con el mismo título y mensaje
-        List<Topico> topicos = topicoRepository.findAll();
-        for (Topico topico : topicos) {
+        List<Topicos> topicos = topicoRepository.findAll();
+        for (Topicos topico : topicos) {
             if (topico.getTitulo().equalsIgnoreCase(datosRegistroTopico.titulo())
                     && topico.getMensaje().equalsIgnoreCase(datosRegistroTopico.mensaje())) {
                 System.out.println("Ya existe un tópico con ese título y mensaje");
@@ -54,8 +54,8 @@ public class TopicoService {
         }
 
         // Si no se encuentra ningún tópico con el mismo título y mensaje, crea y guarda uno nuevo
-        Topico nuevoTopico = new Topico(datosRegistroTopico, autor, curso);
-        Topico topicoGuardado = topicoRepository.save(nuevoTopico);
+        Topicos nuevoTopico = new Topicos(datosRegistroTopico, autor, cursos);
+        Topicos topicoGuardado = topicoRepository.save(nuevoTopico);
         System.out.println("Tópico guardado: " + topicoGuardado);
 
         return topicoGuardado;
@@ -64,26 +64,26 @@ public class TopicoService {
 
     private static final Logger logger = LoggerFactory.getLogger(TopicoService.class);
 
-    public List<Topico> buscarPorCategoriaYSubcategoria(Categoria categoria, String subcategoria) {
+    public List<Topicos> buscarPorCategoriaYSubcategoria(Categoria categoria, String subcategoria) {
         logger.info("Buscando temas para categoría {} y subcategoría {}", categoria, subcategoria);
         // Aquí va la lógica para buscar los temas
-        List<Topico> temas = topicoRepository.findByCategoriaAndSubcategoria(categoria, subcategoria);
+        List<Topicos> temas = topicoRepository.findByCategoriaAndSubcategoria(categoria, subcategoria);
         logger.info("Encontrados {} temas para categoría {} y subcategoría {}", temas.size(), categoria, subcategoria);
         return temas;
     }
 
-    public Boolean tieneRespuestaComoSolucion(Topico get) {
-        Topico topico = topicoRepository.getReferenceById(get.getId());
+    public Boolean tieneRespuestaComoSolucion(Topicos get) {
+        Topicos topico = topicoRepository.getReferenceById(get.getId());
         Boolean resultado = false;
-        for (Respuesta respuesta : topico.getRespuestas()) {
-            if (respuesta.getSolucion().equals(Boolean.TRUE)) {
+        for (Respuestas respuestas : topico.getRespuestas()) {
+            if (respuestas.getSolucion().equals(Boolean.TRUE)) {
                 resultado = true;
             }
         }
         return resultado;
     }
 
-    public Boolean perteneceAlUsuario(Topico topico) {
+    public Boolean perteneceAlUsuario(Topicos topico) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("-----" + authentication);
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -98,8 +98,8 @@ public class TopicoService {
         return topico.getAutor().getUsername().equals(nombreUsuarioAutenticado);
     }
 
-    public Topico obtenerTopicoPorId(Long id) {
-        Topico topico = topicoRepository.findById(id).get();
+    public Topicos obtenerTopicoPorId(Long id) {
+        Topicos topico = topicoRepository.findById(id).get();
         return topico;
     }
 }

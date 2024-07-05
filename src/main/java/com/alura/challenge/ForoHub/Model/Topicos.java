@@ -28,7 +28,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Topico {
+public class Topicos {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,20 +44,20 @@ public class Topico {
     private Boolean estaSolucionado;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private Usuario autor;
+    private Usuarios autor;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private Curso curso;
+    private Cursos cursos;
 
     @OneToMany(mappedBy = "topico")
-    private List<Respuesta> respuestas;
+    private List<Respuestas> respuestas;
 
-    public Topico(DatosRegistroTopico topicoDTO, Usuario autor, Curso curso) {
+    public Topicos(DatosRegistroTopico topicoDTO, Usuarios autor, Cursos cursos) {
         this.titulo = topicoDTO.titulo();
         this.mensaje = topicoDTO.mensaje();
         this.fechaCreacion = LocalDateTime.now();
         this.autor = autor;
-        this.curso = curso;
+        this.cursos = cursos;
         this.status = true;
         this.estaSolucionado = false;
     }

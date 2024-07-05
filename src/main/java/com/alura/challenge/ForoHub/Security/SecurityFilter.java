@@ -1,6 +1,6 @@
 package com.alura.challenge.ForoHub.Security;
 
-import com.alura.challenge.ForoHub.Model.Usuario;
+import com.alura.challenge.ForoHub.Model.Usuarios;
 import com.alura.challenge.ForoHub.Repository.IUsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -32,7 +32,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (tokenJWT != null && tokenService.isValidToken(tokenJWT)) {
             String correoElectronico = tokenService.getSubject(tokenJWT);
-            Usuario usuario = (Usuario) usuarioRepo.findByCorreoElectronico(correoElectronico);
+            Usuarios usuario = (Usuarios) usuarioRepo.findByCorreoElectronico(correoElectronico);
 
             if (usuario != null) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

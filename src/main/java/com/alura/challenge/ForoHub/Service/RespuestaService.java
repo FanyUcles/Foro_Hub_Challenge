@@ -1,9 +1,9 @@
 package com.alura.challenge.ForoHub.Service;
 
 import com.alura.challenge.ForoHub.DTO.DatosRegistroRespuestas;
-import com.alura.challenge.ForoHub.Model.Respuesta;
-import com.alura.challenge.ForoHub.Model.Topico;
-import com.alura.challenge.ForoHub.Model.Usuario;
+import com.alura.challenge.ForoHub.Model.Respuestas;
+import com.alura.challenge.ForoHub.Model.Topicos;
+import com.alura.challenge.ForoHub.Model.Usuarios;
 import com.alura.challenge.ForoHub.Repository.IRespuestaRepository;
 import com.alura.challenge.ForoHub.Repository.ITopicoRepository;
 import com.alura.challenge.ForoHub.Repository.IUsuarioRepository;
@@ -26,39 +26,39 @@ public class RespuestaService {
     private ITopicoRepository topicoRepo;
 
     @Transactional
-    public Respuesta registrarServicio(DatosRegistroRespuestas datosRegistroRespuesta) {
+    public Respuestas registrarServicio(DatosRegistroRespuestas datosRegistroRespuesta) {
 
         Long topicoId = datosRegistroRespuesta.topicoId();
-        Topico topico = topicoRepo.findById(topicoId).orElseThrow(() -> new IllegalArgumentException("El curso con ID " + topicoId + " no existe"));
+        Topicos topico = topicoRepo.findById(topicoId).orElseThrow(() -> new IllegalArgumentException("El curso con ID " + topicoId + " no existe"));
 
         Long autorId = datosRegistroRespuesta.autorId();
-        Usuario autor = usuarioRepository.findById(autorId)
+        Usuarios autor = usuarioRepository.findById(autorId)
                 .orElseThrow(() -> new IllegalArgumentException("El autor con ID " + autorId + " no existe."));
 
-        Respuesta respuesta = new Respuesta(datosRegistroRespuesta, autor, topico);
-        return respuestaRepo.save(respuesta);
+        Respuestas respuestas = new Respuestas(datosRegistroRespuesta, autor, topico);
+        return respuestaRepo.save(respuestas);
     }
 
-    public Page<Respuesta> getRespuestasPorTopico(Long topicoId, Pageable pageable) {
+    public Page<Respuestas> getRespuestasPorTopico(Long topicoId, Pageable pageable) {
         return respuestaRepo.findByTopicoId(topicoId, pageable);
     }
 
     public void marcarRespuestaComoSolucion(Long idRespuesta) {
-        Respuesta respuesta = respuestaRepo.findById(idRespuesta)
+        Respuestas respuestas = respuestaRepo.findById(idRespuesta)
                 .orElseThrow(() -> new RuntimeException("Respuesta no encontrada para el ID: " + idRespuesta));
 
-        respuesta.darRespuestaComoSolucion();
+        respuestas.darRespuestaComoSolucion();
 
-        respuestaRepo.save(respuesta);
+        respuestaRepo.save(respuestas);
     }
 
     public void desmarcarRespuestaComoSolucion(Long idRespuesta) {
-        Respuesta respuesta = respuestaRepo.findById(idRespuesta)
+        Respuestas respuestas = respuestaRepo.findById(idRespuesta)
                 .orElseThrow(() -> new RuntimeException("Respuesta no encontrada para el ID: " + idRespuesta));
 
-        respuesta.desmarcarRespuestaComoSolucion();
+        respuestas.desmarcarRespuestaComoSolucion();
 
-        respuestaRepo.save(respuesta);
+        respuestaRepo.save(respuestas);
     }
 
 }

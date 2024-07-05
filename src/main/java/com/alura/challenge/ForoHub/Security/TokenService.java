@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.alura.challenge.ForoHub.Model.Usuario;
+import com.alura.challenge.ForoHub.Model.Usuarios;
 import com.auth0.jwt.JWTVerifier;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -18,7 +18,7 @@ public class TokenService {
     @Value("${api.security.secret}")
     private String apiSecret;
 
-    public String generarToken(Usuario usuario) {
+    public String generarToken(Usuarios usuario) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret);
             return JWT.create()

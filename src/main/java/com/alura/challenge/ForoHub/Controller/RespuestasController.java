@@ -1,9 +1,9 @@
 package com.alura.challenge.ForoHub.Controller;
 
 import com.alura.challenge.ForoHub.DTO.DatosRegistroRespuestas;
-import com.alura.challenge.ForoHub.DTO.DatosRespuestaRespuestas;
-import com.alura.challenge.ForoHub.Model.Respuesta;
-import com.alura.challenge.ForoHub.Model.Topico;
+import com.alura.challenge.ForoHub.DTO.DatosRespuestaARespuestas;
+import com.alura.challenge.ForoHub.Model.Respuestas;
+import com.alura.challenge.ForoHub.Model.Topicos;
 import com.alura.challenge.ForoHub.Repository.IRespuestaRepository;
 import com.alura.challenge.ForoHub.Repository.ITopicoRepository;
 import com.alura.challenge.ForoHub.Service.RespuestaService;
@@ -33,7 +33,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestController
 @RequestMapping("/respuesta")
 @SecurityRequirement(name = "bearer-key")
-public class RespuestaController {
+public class RespuestasController {
 
     @Autowired
     private RespuestaService respuestaService;
@@ -47,30 +47,30 @@ public class RespuestaController {
     @PostMapping("/registrar")
     public ResponseEntity registrarRespuesta(@RequestBody @Valid DatosRegistroRespuestas datosRegistroRespuesta, UriComponentsBuilder uriComponentsBuilder) {
 
-        Respuesta respuesta = respuestaService.registrarServicio(datosRegistroRespuesta);
+        Respuestas respuestas = respuestaService.registrarServicio(datosRegistroRespuesta);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        DatosRespuestaRespuestas datosRespuesta = new DatosRespuestaRespuestas(
-                respuesta.getId(),
-                respuesta.getMensaje(),
-                respuesta.getFechaCreacion().format(formatter),
-                respuesta.getSolucion(),
-                respuesta.getAutor().getNombre(),
-                respuesta.getAutor().getPerfil(),
-                respuesta.getTopico().getTitulo());
+        DatosRespuestaARespuestas datosRespuesta = new DatosRespuestaARespuestas(
+                respuestas.getId(),
+                respuestas.getMensaje(),
+                respuestas.getFechaCreacion().format(formatter),
+                respuestas.getSolucion(),
+                respuestas.getAutor().getNombre(),
+                respuestas.getAutor().getPerfil(),
+                respuestas.getTopico().getTitulo());
 
-        URI url = uriComponentsBuilder.path("/respuesta/{id}").buildAndExpand(respuesta.getId()).toUri();
+        URI url = uriComponentsBuilder.path("/respuesta/{id}").buildAndExpand(respuestas.getId()).toUri();
 
         return ResponseEntity.created(url).body(datosRespuesta);
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<Page<DatosRespuestaRespuestas>> listarRespuestas(
+    public ResponseEntity<Page<DatosRespuestaARespuestas>> listarRespuestas(
             @PageableDefault(size = 10, sort = "fechaCreacion", direction = Sort.Direction.ASC) Pageable paginacion) {
 
-        Page<Respuesta> respuestas = respuestaRepo.findByStatusTrue(paginacion);
+        Page<Respuestas> respuestas = respuestaRepo.findByStatusTrue(paginacion);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        Page<DatosRespuestaRespuestas> datosRespuesta = respuestas.map(respuesta
-                        -> new DatosRespuestaRespuestas(
+        Page<DatosRespuestaARespuestas> datosRespuesta = respuestas.map(respuesta
+                        -> new DatosRespuestaARespuestas(
                         respuesta.getId(),
                         respuesta.getMensaje(),
                         respuesta.getFechaCreacion().format(formatter),
@@ -90,10 +90,10 @@ public class RespuestaController {
             @PageableDefault(size = 10, sort = "fechaCreacion", direction = Sort.Direction.ASC) Pageable pageable) {
 
         if (topicoId != null) {
-            Page<Respuesta> respuestas = respuestaService.getRespuestasPorTopico(topicoId, pageable);
+            Page<Respuestas> respuestas = respuestaService.getRespuestasPorTopico(topicoId, pageable);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             if (!respuestas.isEmpty()) {
-                Page<DatosRespuestaRespuestas> datosRespuesta = respuestas.map(respuesta -> new DatosRespuestaRespuestas(
+                Page<DatosRespuestaARespuestas> datosRespuesta = respuestas.map(respuesta -> new DatosRespuestaARespuestas(
                         respuesta.getId(),
                         respuesta.getMensaje(),
                         respuesta.getFechaCreacion().format(formatter),
@@ -115,20 +115,20 @@ public class RespuestaController {
     @Transactional
     public ResponseEntity actualizarTopico(@RequestBody @Valid DatosRegistroRespuestas.DatosActualizarRespuestas datosActualizarRespuesta) {
 
-        Optional<Respuesta> respOptional = respuestaRepo.findById(datosActualizarRespuesta.id());
+        Optional<Respuestas> respOptional = respuestaRepo.findById(datosActualizarRespuesta.id());
 
         if (respOptional.isPresent()) {
-            Respuesta respuesta = respOptional.get();
-            respuesta.actualizarDatos(datosActualizarRespuesta);
+            Respuestas respuestas = respOptional.get();
+            respuestas.actualizarDatos(datosActualizarRespuesta);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            return ResponseEntity.ok(new DatosRespuestaRespuestas(
-                    respuesta.getId(),
-                    respuesta.getMensaje(),
-                    respuesta.getFechaCreacion().format(formatter),
-                    respuesta.getSolucion(),
-                    respuesta.getAutor().getNombre(),
-                    respuesta.getAutor().getPerfil(),
-                    respuesta.getTopico().getTitulo()));
+            return ResponseEntity.ok(new DatosRespuestaARespuestas(
+                    respuestas.getId(),
+                    respuestas.getMensaje(),
+                    respuestas.getFechaCreacion().format(formatter),
+                    respuestas.getSolucion(),
+                    respuestas.getAutor().getNombre(),
+                    respuestas.getAutor().getPerfil(),
+                    respuestas.getTopico().getTitulo()));
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("No se encontró una respuesta con el ID proporcionado.");
         }
@@ -137,10 +137,10 @@ public class RespuestaController {
     @DeleteMapping("/eliminar/{id}")
     @Transactional
     public ResponseEntity eliminarRespuesta(@PathVariable Long id) {
-        Optional<Respuesta> respuestaOptional = respuestaRepo.findById(id);
+        Optional<Respuestas> respuestaOptional = respuestaRepo.findById(id);
         if (respuestaOptional.isPresent()) {
-            Respuesta respuesta = respuestaOptional.get();
-            respuestaRepo.deleteById(respuesta.getId());
+            Respuestas respuestas = respuestaOptional.get();
+            respuestaRepo.deleteById(respuestas.getId());
             return ResponseEntity.ok().body("La respuesta se eliminó exitosamente");
         }
 
@@ -150,10 +150,10 @@ public class RespuestaController {
     @DeleteMapping("/baja/{id}")
     @Transactional
     public ResponseEntity darDeBajaRespuesta(@PathVariable Long id) {
-        Optional<Respuesta> respuestaOptional = respuestaRepo.findById(id);
+        Optional<Respuestas> respuestaOptional = respuestaRepo.findById(id);
         if (respuestaOptional.isPresent()) {
-            Respuesta respuesta = respuestaOptional.get();
-            respuesta.desactivarRespuesta();
+            Respuestas respuestas = respuestaOptional.get();
+            respuestas.desactivarRespuesta();
             return ResponseEntity.ok().body("La respuesta se dió de baja exitosamente");
         }
         return ResponseEntity.noContent().build();
@@ -162,13 +162,13 @@ public class RespuestaController {
     @GetMapping("/solucion/{id}")
     @Transactional
     public ResponseEntity marcarComoSolucion(@PathVariable Long id) {
-        Optional<Respuesta> respuestaOptional = respuestaRepo.findById(id);
+        Optional<Respuestas> respuestaOptional = respuestaRepo.findById(id);
         if (respuestaOptional.isPresent()) {
-            Respuesta respuesta = respuestaOptional.get();
-            Long idTopico = respuesta.getTopico().getId();
-            Topico topico = topicoRepo.getReferenceById(idTopico);
+            Respuestas respuestas = respuestaOptional.get();
+            Long idTopico = respuestas.getTopico().getId();
+            Topicos topico = topicoRepo.getReferenceById(idTopico);
             if (topico.getEstaSolucionado().equals(Boolean.FALSE)) {
-                respuesta.darRespuestaComoSolucion();
+                respuestas.darRespuestaComoSolucion();
                 topico.setEstaSolucionado(Boolean.TRUE);
                 return ResponseEntity.ok().body("La respuesta fue marcada como solución al tópico");
             } else {
@@ -180,18 +180,18 @@ public class RespuestaController {
 
     @GetMapping("/detalle/{id}")
     public ResponseEntity retornarDatosRespuesta(@PathVariable Long id) {
-        Optional<Respuesta> optionalResp = respuestaRepo.findById(id);
+        Optional<Respuestas> optionalResp = respuestaRepo.findById(id);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         if (optionalResp.isPresent()) {
-            Respuesta respuesta = optionalResp.get();
-            var datosRespuesta = new DatosRespuestaRespuestas(
-                    respuesta.getId(),
-                    respuesta.getMensaje(),
-                    respuesta.getFechaCreacion().format(formatter),
-                    respuesta.getSolucion(),
-                    respuesta.getAutor().getNombre(),
-                    respuesta.getAutor().getPerfil(),
-                    respuesta.getTopico().getTitulo());
+            Respuestas respuestas = optionalResp.get();
+            var datosRespuesta = new DatosRespuestaARespuestas(
+                    respuestas.getId(),
+                    respuestas.getMensaje(),
+                    respuestas.getFechaCreacion().format(formatter),
+                    respuestas.getSolucion(),
+                    respuestas.getAutor().getNombre(),
+                    respuestas.getAutor().getPerfil(),
+                    respuestas.getTopico().getTitulo());
             return ResponseEntity.ok(datosRespuesta);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró ninguna respuesta con el ID proporcionado.");
