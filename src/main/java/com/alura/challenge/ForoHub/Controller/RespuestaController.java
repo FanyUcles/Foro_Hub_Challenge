@@ -104,10 +104,10 @@ public class RespuestaController {
                 ));
                 return ResponseEntity.ok().body(datosRespuesta);
             } else {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("No se encontraron resultados para el topico buscado.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("No se encontraron resultados para el topico buscado");
             }
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Debe ingresar un id valido.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(" Ingrese un ID valido");
         }
     }
 
@@ -130,7 +130,7 @@ public class RespuestaController {
                     respuesta.getAutor().getPerfil(),
                     respuesta.getTopico().getTitulo()));
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se encontró una respuesta con el id proporcionado.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se encontró una respuesta con el ID proporcionado.");
         }
     }
 

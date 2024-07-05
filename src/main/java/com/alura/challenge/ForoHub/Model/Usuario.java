@@ -56,18 +56,18 @@ public class Usuario  implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        // Añadir roles adicionales según el perfil del usuario
+        // Roles adicionales según el perfil del usuario
         switch (perfil) {
-            case ADMINISTRADOR:
+            case administrador:
                 authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
                 break;
-            case MODERADOR:
+            case moderador:
                 authorities.add(new SimpleGrantedAuthority("ROLE_MODERATOR"));
                 break;
-            case ESTUDIANTE:
+            case estudante:
                 authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
                 break;
-            case INSTRUCTOR:
+            case instructor:
                 authorities.add(new SimpleGrantedAuthority("ROLE_INSTRUCTOR"));
                 break;
         }

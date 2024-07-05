@@ -31,13 +31,13 @@ public class AutenticacionController {
     @PostMapping
     public ResponseEntity<DatosJWTtoken> autenticarUsuario(@RequestBody DatosAutenticacionUsuario datosAutenticacionUsuario) {
         Authentication authenticationToken = new UsernamePasswordAuthenticationToken(datosAutenticacionUsuario.correoElectronico(), datosAutenticacionUsuario.password());
-        System.out.println("******authenticationToken***" + authenticationToken);
+        System.out.println("-----Token de Autenticación----- " + authenticationToken);
         Authentication usuarioAutenticado = authenticationManager.authenticate(authenticationToken);
-        System.out.println("*********usuarioAutenticado*******"+ usuarioAutenticado);
+        System.out.println("-----Usuario Autenticado----- "+ usuarioAutenticado);
         String tokenJWT = tokenService.generarToken((Usuario) usuarioAutenticado.getPrincipal());
-        System.out.println("**********tokenJWT" + tokenJWT);
+        System.out.println("-----Token JWT----- " + tokenJWT);
         DatosJWTtoken response = new DatosJWTtoken(tokenJWT, ((Usuario) usuarioAutenticado.getPrincipal()).getNombre());
-        System.out.println("******response "+ response);
+        System.out.println("-----Response----- "+ response);
         return ResponseEntity.ok(response);
     }
 

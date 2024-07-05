@@ -92,7 +92,7 @@ public class TopicoController {
         }
 
         if (topicos.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se encontraron resultados para la categoría principal proporcionada.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se encontraron resultados para la categoría proporcionada.");
         }
 
         Page<DatosListadoTopico> datosListadoTopicos = topicos.map(DatosListadoTopico::new);
@@ -130,7 +130,7 @@ public class TopicoController {
             );
             return ResponseEntity.ok(datosTopico);
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se encontró un topico con el id proporcionado.");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se encontró un topico con el ID proporcionado.");
         }
     }
 

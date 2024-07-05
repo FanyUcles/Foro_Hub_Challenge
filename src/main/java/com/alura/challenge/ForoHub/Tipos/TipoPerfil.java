@@ -1,11 +1,11 @@
 package com.alura.challenge.ForoHub.Tipos;
 
-public class TipoPerfil {
+public enum TipoPerfil {
 
-    ADMINISTRADOR("Administrador"),
-    MODERADOR("Moderador"),
-    ESTUDIANTE("Estudiante"),
-    INSTRUCTOR("Instructor");
+    administrador("Administrador"),
+    moderador("Moderador"),
+    estudante("Estudiante"),
+    instructor("Instructor");
 
     private String nombre;
 

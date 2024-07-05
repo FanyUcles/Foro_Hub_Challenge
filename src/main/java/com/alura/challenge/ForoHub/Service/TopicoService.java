@@ -85,7 +85,7 @@ public class TopicoService {
 
     public Boolean perteneceAlUsuario(Topico topico) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("*************" + authentication);
+        System.out.println("-----" + authentication);
         if (authentication == null || !authentication.isAuthenticated()) {
             return false; // Si no hay autenticación, no pertenece al usuario en sesión
 
@@ -93,8 +93,8 @@ public class TopicoService {
 
         String nombreUsuarioAutenticado = authentication.getName();
         // Comparar el nombre del usuario autenticado con el nombre del autor del tópico
-        System.out.println("*************Nombre " + nombreUsuarioAutenticado);
-        System.out.println("resultado "+ topico.getAutor().getUsername().equals(nombreUsuarioAutenticado));
+        System.out.println("----- Nombre----- " + nombreUsuarioAutenticado);
+        System.out.println("----- Resultado ----- "+ topico.getAutor().getUsername().equals(nombreUsuarioAutenticado));
         return topico.getAutor().getUsername().equals(nombreUsuarioAutenticado);
     }
 

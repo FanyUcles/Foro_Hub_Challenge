@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.aluracursos.forohub.model.Usuario;
+import com.alura.challenge.ForoHub.Model.Usuario;
 import com.auth0.jwt.JWTVerifier;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -46,7 +46,7 @@ public class TokenService {
 
     public String getSubject(String tokenJWT) {
 
-        System.out.println("**********tokenJWT********** " + tokenJWT);
+        System.out.println("-----Token JWT----- " + tokenJWT);
         try {
             Algorithm algorithm = Algorithm.HMAC256(apiSecret);
             return JWT.require(algorithm)

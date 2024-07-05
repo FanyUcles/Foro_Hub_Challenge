@@ -28,11 +28,10 @@ public class SpringDocConfiguration {
                                         .bearerFormat("JWT")))
                 .info(new Info()
                         .title("API ForoHub")
-                        .description("API Rest de la aplicación ForoHub, que contiene las funcionalidades de " +
-                                "CRUD de Tópicos, respuestas , Usuarios y cursos")
+                        .description("API Rest de la aplicación ForoHub contiene las funcionalidades de CRUD de Tópicos, respuestas , Usuarios y Cursos")
                         .contact(new Contact()
-                                .name("Equipo Backend")
-                                .email("backend@foro.hub"))
+                                .name("Backend Developer")
+                                .email("DevBackend@foro.hub"))
                         .license(new License()
                                 .name("Apache 2.0")
                                 .url("http://foro.hub/api/licencia")));
@@ -53,4 +52,4 @@ public class SpringDocConfiguration {
 
     }
 }
-}
+
